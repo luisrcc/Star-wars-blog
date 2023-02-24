@@ -1,6 +1,13 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			getPerson: [],
+			getVehicles: [],
+			getPlanet: [],
+			favorites: [],
+			characterDetail:[],
+			vehiclesDetails: [],
+			planetDetail:[],
 			demo: [
 				{
 					title: "FIRST",
@@ -37,7 +44,53 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			getPersonApi: async ()=>{
+				const settings = {
+					method: "GET",
+					headers:{
+						"Content-Type": "application.json"
+					}
+				};
+				const response = await fetch("https://www.swapi.tech/api/people", settings);
+				const json = await response.json();
+
+				setStore({getPerson: json.results});
+			},
+			getVehicleApi: async ()=>{
+				const settings = {
+					method: "GET",
+					headers: {
+						"content-Type": "application.json"
+					}
+				};
+				const response = await fetch("https://www.swapi.tech/api/vehicles", settings);
+				const json = await response.json();
+
+				setStore({getVehicles: json.results});
+			},
+			getPlanetApi: async () =>{
+				const settings = {
+					method: "GET",
+					headers: {
+						"Content-Type": "application.json"
+					}
+				};
+				const response = await fetch("https://www.swapi.tech/api/planets");
+				const json = await response.json();
+
+				setStore({ getPlanet: json.results});
+			},
+			addFavorites: item =>{
+				const store = getStore();
+				setStore({favorites:[...store.favorites,item]});
+			},
+			removeFavorites: item =>{
+				const store = getStore();
+				const removeName = store.favorites(name=> name != item);
+				setStore({ favorites: removeName});
 			}
+
 		}
 	};
 };
